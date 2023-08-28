@@ -1,0 +1,31 @@
+
+
+{
+  "nproc": 1,
+  "img_dirs": [
+    "D:\\omqdata\\rgb\\DOTA/images/train"
+  ],
+  "ann_dirs": [
+    "D:\\omqdata\\rgb\\DOTA/annfiles/train"
+  ],
+
+  "sizes": [
+    1024
+  ],
+  "gaps": [
+    0
+  ],
+  "rates": [
+    1.0
+  ],
+  "img_rate_thr": 0.6,
+  "iof_thr": 0.7,
+  "no_padding": false,
+  "padding_value": [
+    104,
+    116,
+    124
+  ],
+  "save_dir": "D:\\omqdata\\rgb\\DOTA\\split",
+  "save_ext": ".png"
+}
