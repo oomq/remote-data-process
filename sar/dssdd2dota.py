@@ -75,20 +75,31 @@ class rsdd2dota():
     def run(self):
         self.image_names = [name for name in os.listdir(self.images_path)]
         for i in range(0, len(self.image_names), self.cols*self.rows):
-            img = self.image_compose(i=i)  # 调用函数
-            name = osp.join(self.save_img_path, "{:0=4d}.jpg".format(i))
-            img.save(name)
-            with open(osp.join(self.save_ann_path, "{:0=4d}.txt".format(i)),"w+") as f:
-                self.ann_compose(i,f)
+            print(len(self.image_names),len(self.image_names)-(len(self.image_names)%(self.cols*self.rows)))
 
+            if not i == (len(self.image_names)-(len(self.image_names)%(self.cols*self.rows))):
+                img = self.image_compose(i=i)  # 调用函数
+                name = osp.join(self.save_img_path, "{:0=4d}.jpg".format(i))
+                img.save(name)
+                with open(osp.join(self.save_ann_path, "{:0=4d}.txt".format(i)),"w+") as f:
+                    self.ann_compose(i,f)
+            else:
+                i=len(self.image_names)-(self.cols*self.rows)
+                img = self.image_compose(i=i)  # 调用函数
+                name = osp.join(self.save_img_path, "{:0=4d}.jpg".format(i))
+                img.save(name)
+                with open(osp.join(self.save_ann_path, "{:0=4d}.txt".format(i)), "w+") as f:
+                    self.ann_compose(i, f)
 
 
 if __name__ == '__main__':
     model = "DSSDD"
-    folder = "train"
-    img_path = r"D:\omqdata\sar\DSSDD\PNGImages\{}".format(folder)
-    ann_path = r"D:\omqdata\sar\DSSDD\annotations\RotatableBox\{}".format(folder)
-    save_path = r"D:\omqdata\sar\dota\{}/{}".format(model,folder)
+    name = ["train","test"]
+    for folder in name:
+        img_path = r"D:\omq\omqdata\sar\DSSDD\PNGImages\{}".format(folder)
+        ann_path = r"D:\omq\omqdata\sar\DSSDD\annotations\RotatableBox\{}".format(folder)
+        imgsets = ""
+        save_path = r"D:\omq\omqdata\sar\dota\{}/{}".format(model,folder)
 
-    r = rsdd2dota(img_path, ann_path, save_path)
-    r.run()
+        r = rsdd2dota(img_path, ann_path, save_path)
+        r.run()

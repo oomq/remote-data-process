@@ -9,10 +9,12 @@ import cv2
 import codecs
 from PIL import Image
 class rsdd2dota():
-    def __init__(self, img_path, ann_path, save_path):
+    def __init__(self, img_path, ann_path, imgset_path, save_path):
         self.images_path = img_path
         self.ann_path = ann_path
+        self.imgset_path = imgset_path
         self.dataname = "rsdd"
+
         self.save_img_path = osp.join(save_path, "images")
         self.save_ann_path = osp.join(save_path, "annfiles")
         os.makedirs(self.save_img_path, exist_ok=True)
@@ -72,21 +74,27 @@ class rsdd2dota():
                             " ship 0\n".format(l,t,l,b,r,b,r,t))
 
     def run(self):
-        self.image_names = [name for name in os.listdir(self.images_path)]
-        for i in range(0, len(self.image_names), 4):
-            img = self.image_compose(i=i)  # 调用函数
-            name = osp.join(self.save_img_path, "{:0=4d}.jpg".format(i))
-            img.save(name)
-            with open(osp.join(self.save_ann_path, "{:0=4d}.txt".format(i)),"w+") as f:
-                self.ann_compose(i,f)
+        # self.image_names = [name for name in os.listdir(self.images_path)]
+            with open(self.imgset_path,"r") as f:
+                self.image_names = [p.replace("\n","")+".jpg" for p in f.readlines()]
+            for i in range(0, len(self.image_names), 4):
+                img = self.image_compose(i=i)  # 调用函数
+                name = osp.join(self.save_img_path, "{:0=4d}.jpg".format(i))
+                img.save(name)
+                with open(osp.join(self.save_ann_path, "{:0=4d}.txt".format(i)),"w+") as f:
+                    self.ann_compose(i,f)
 
 
 
 if __name__ == '__main__':
     model = "RSDD"
-    img_path = "D:\omqdata\sar\RSDD\JPEGImages"
-    ann_path = "D:\omqdata\sar\RSDD\Annotations"
-    save_path = r"D:\omqdata\sar\dota\{}/".format(model)
+    name = ["train", "test"]
 
-    r = rsdd2dota(img_path, ann_path, save_path)
-    r.run()
+    for _name in name:
+        img_path = "D:\omq\omqdata\sar\RSDD\JPEGImages"
+        ann_path = "D:\omq\omqdata\sar\RSDD\Annotations"
+        imagesets = "D:\omq\omqdata\sar\RSDD\ImageSets\{}.txt".format(_name)
+        save_path = r"D:\omq\omqdata\sar\dota\{}/{}".format(model,_name)
+
+        r = rsdd2dota(img_path, ann_path, imagesets,save_path)
+        r.run()

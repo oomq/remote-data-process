@@ -68,10 +68,11 @@ class rsdd2dota():
 
 if __name__ == '__main__':
     model = "SSDD"
-    folder="train"
-    img_path = r"D:\omqdata\sar\Official-SSDD-OPEN\BBox_SSDD\voc_style\JPEGImages_{}".format(folder)
-    ann_path = r"D:\omqdata\sar\Official-SSDD-OPEN\BBox_SSDD\voc_style\Annotations_{}".format(folder)
-    save_path = r"D:\omqdata\sar\dota\{}/".format(model)
+    name = ["train","test"]
+    for folder in name:
+        img_path = r"D:\omq\omqdata\sar\Official-SSDD-OPEN\BBox_SSDD\voc_style\JPEGImages_{}".format(folder)
+        ann_path = r"D:\omq\omqdata\sar\Official-SSDD-OPEN\BBox_SSDD\voc_style\Annotations_{}".format(folder)
+        save_path = r"D:\omq\omqdata\sar\dota\{}/{}".format(model,folder)
 
-    r = rsdd2dota(img_path, ann_path, save_path)
-    r.run()
+        r = rsdd2dota(img_path, ann_path, save_path)
+        r.run()

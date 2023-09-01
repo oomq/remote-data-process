@@ -232,8 +232,9 @@ class hugepic2dota():
 
 if __name__ == '__main__':
     model = "LSSDD"
-    img_path = "D:\omqdata\sar\LSSSDD\JPEGImages_VH"
-    ann_path = "D:\omqdata\sar\LSSSDD\Annotations"
+    imagesets = "ImageSets"
+    img_path = "D:\omg\omqdata\sar\LSSSDD\JPEGImages_VH"
+    ann_path = "D:\omg\omqdata\sar\LSSSDD\Annotations"
     save_path = r"D:\omqdata\sar\dota\{}/".format(model)
 
     r = hugepic2dota(img_path,ann_path,save_path)

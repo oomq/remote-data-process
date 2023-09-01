@@ -27,6 +27,8 @@ try:###
 except ImportError:
     gdal = None
 from PIL import Image
+from osgeo import gdal
+# import gdal
 
 class sarshiphugepic2dota():
     def __init__(self,img_path,ann_path,save_path):
@@ -173,7 +175,7 @@ class sarshiphugepic2dota():
             patch_info['x_start'] = x_start
             patch_info['y_start'] = y_start
             patch_info['id'] = \
-                self.filename+'__' + str(x_stop - x_start) + \
+                self.filename.replace("-1.0","")+'__' + str(x_stop - x_start) + \
                 '__' + str(x_start) + '___' + str(y_start)
 
             ann = window_anns[i]
@@ -249,8 +251,7 @@ class sarshiphugepic2dota():
             # self.img_file = cv2.cvtColor(self.img_file, cv2.COLOR_BGR2GRAY)
             # self.img_file = cv2.equalizeHist(self.img_file)
 
-            self.img_file = gdal.Open(osp.join(self.img_path,
-                                               self.filename.replace("-label", ".tiff")),gdal.GA_ReadOnly)
+            self.img_file = gdal.Open(osp.join(self.img_path,self.filename.replace("-label", ".tiff")),gdal.GA_ReadOnly)
 
             if self.img_file is None:
                 raise Exception(f"Unable to open file: tiff")
@@ -286,10 +287,11 @@ class sarshiphugepic2dota():
 
 
 if __name__ == '__main__':
+    ###只有图没有划分数据集
     model = "SARSHIP"
-    img_path = r"D:\omqdata\sar\SARship-1\images"
-    ann_path = r"D:\omqdata\sar\SARship-1\annfiles"
-    save_path = r"D:\omqdata\sar\dota\{}/".format(model)
+    img_path = r"D:\omq\omqdata\sar\SARship-1\images"
+    ann_path = r"D:\omq\omqdata\sar\SARship-1\annfiles"
+    save_path = r"D:\omq\omqdata\sar\dota\{}/".format(model)
 
     r = sarshiphugepic2dota(img_path,ann_path,save_path)
     r.run()
