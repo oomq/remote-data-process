@@ -8,7 +8,7 @@ import json
 #                'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter', 'container-crane']
 
 wordname_16 =["ship",]
-def DOTA2COCO(srcpath, destfile,image_id):
+def DOTA2COCO(srcpath, destfile,image_id,inst_count):
     imageparent = os.path.join(srcpath, 'images')
     labelparent = os.path.join(srcpath, 'annfiles')
 
@@ -27,7 +27,7 @@ def DOTA2COCO(srcpath, destfile,image_id):
         single_cat = {'id': idex + 1, 'name': name, 'supercategory': name}
         data_dict['categories'].append(single_cat)
 
-    inst_count = 1
+    # inst_count = 1
     # image_id = 1
     with open(destfile, 'w') as f_out:
         filenames = util.GetFileFromThisRootDir(labelparent)
@@ -68,19 +68,21 @@ def DOTA2COCO(srcpath, destfile,image_id):
                 inst_count = inst_count + 1
             image_id = image_id + 1
         json.dump(data_dict, f_out)
-    return image_id
+    return image_id,inst_count
 
 if __name__ == '__main__':
     root= r'D:\omq\omqdata\sar\dota'
     name = ["train","test"]
     for _name in name:
-        image_id = 1
+        image_id = 6000
+        inst_count = 6000
         for folder in os.listdir(root):
             if os.path.exists(os.path.join(root,folder,_name)):
                 print(folder,_name)
-                image_id = DOTA2COCO(os.path.join(root,folder,_name),
-                          os.path.join(root,folder,"{}.json".format(_name)),image_id=image_id+1)
-                print(image_id)
+                image_id,inst_count = DOTA2COCO(os.path.join(root,folder,_name),
+                          os.path.join(root,folder,"{}.json".format(_name)),
+                                     image_id=image_id,inst_count = inst_count)
+                print(image_id,inst_count)
 
 
 

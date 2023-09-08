@@ -259,9 +259,12 @@ class sarshiphugepic2dota():
             image_data = self.img_file.ReadAsArray()
             image_data = np.array(image_data, dtype=np.uint16)
             ## >255 ?= 255
-            image_data = np.clip(image_data, None, 255)
-            image_data = self.percentage_truncation(image_data)
-            self.img_file = cv2.equalizeHist(image_data)
+
+            image_data = np.clip(image_data, 0, 255)
+            self.img_file = cv2.medianBlur(image_data, 3)
+
+            # image_data = self.percentage_truncation(image_data)
+            # self.img_file = cv2.equalizeHist(image_data.astype(np.uint8))
             # 读取影像数据
             # image_data = self.img_file.ReadAsArray()
             # image_data = np.array(image_data, dtype=np.uint16)
@@ -288,7 +291,7 @@ class sarshiphugepic2dota():
 
 if __name__ == '__main__':
     ###只有图没有划分数据集
-    model = "SARSHIP"
+    model = "SARSHIP-test"
     img_path = r"D:\omq\omqdata\sar\SARship-1\images"
     ann_path = r"D:\omq\omqdata\sar\SARship-1\annfiles"
     save_path = r"D:\omq\omqdata\sar\dota\{}/".format(model)
