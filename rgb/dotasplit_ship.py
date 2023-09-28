@@ -15,7 +15,7 @@ import time
 from functools import partial, reduce
 from math import ceil
 from multiprocessing import Manager, Pool
-
+from osgeo import gdal
 import cv2
 import numpy as np
 from PIL import Image
@@ -298,7 +298,12 @@ def crop_and_save_img(info, windows, window_anns, img_dir, no_padding,
     Returns:
         list[dict]: Information of paths.
     """
+
     img = cv2.imread(osp.join(img_dir, info['filename']))
+    if img is None:
+        srcImage = gdal.Open(osp.join(img_dir, info['filename']))
+        img = np.einsum("ijk->jki", srcImage.ReadAsArray())
+
     ### pass the tittle picture
     # if img.shape[0]*img.shape[1] <= 1500*1500:
     #     # print(osp.join(img_dir, info['filename']),osp.join(save_dir, info['filename']))
@@ -350,8 +355,8 @@ def crop_and_save_img(info, windows, window_anns, img_dir, no_padding,
         patch_infos.append(patch_info)
 
         ### pass non-ship picture
-        if bboxes_num == 0 or patch_info['ann']["labels"].count("ship") <=3:###减少少量样本
-            continue
+        # if bboxes_num == 0 or patch_info['ann']["labels"].count("ship") <=3:###减少少量样本
+        #     continue
 
         with codecs.open(outdir, 'w', 'utf-8') as f_out:
             if bboxes_num == 0 :
@@ -397,6 +402,7 @@ def single_split(arguments, sizes, gaps, img_rate_thr, iof_thr, no_padding,
         list[dict]: Information of paths.
     """
     info, img_dir = arguments
+    print(img_dir, info['filename'])
     windows = get_sliding_window(info, sizes, gaps, img_rate_thr)
     window_anns = get_window_obj(info, windows, iof_thr)
     patch_infos = crop_and_save_img(info, windows, window_anns, img_dir,

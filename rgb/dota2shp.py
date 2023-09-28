@@ -9,7 +9,9 @@ import cv2 as cv
 from skimage import transform
 from osgeo import osr, ogr, gdal
 
-
+'''
+读取tif图片获取geo格式并将DOTA格式的文件转为shp文件
+'''
 def trans_xy_to_geo(poly_points, trans_para):
     geo_points = []
     for num in range(2,len(poly_points)+1,2):
